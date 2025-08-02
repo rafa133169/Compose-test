@@ -4,7 +4,7 @@ services:
   frontend:
     build: ./landing
     ports:
-      - "3129:3000"
+      - "3129:80"
     depends_on:
       - backend
     networks:

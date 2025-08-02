@@ -100,7 +100,7 @@ cp .env.example .env
 docker-compose up -d
 
 # Verificar
-curl http://localhost:3000  # Frontend
+curl http://localhost:80  # Frontend
 curl http://localhost:4000/api/health  # API
 ```
 
