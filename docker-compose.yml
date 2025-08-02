@@ -1,41 +1,46 @@
-version: '3.8'
+name: compose-test
 
 services:
-  api:
-    build: ./api
-    ports:
-      - "4000:4000"
-    env_file: .env
-    depends_on:
-      - db
-    networks:
-      - tot-network
-
-  landing:
+  frontend:
     build: ./landing
     ports:
-      - ":80"
+      - "3129:3000"
+    depends_on:
+      - backend
     networks:
-      - tot-network
+      - app-network
+
+  backend:
+    build: ./api
+    ports:
+      - "3138:3001"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: formulario_db
+      
+    networks:
+      - app-network
 
   db:
-    image: mysql:8.0
+    image: mysql:8
     restart: always
     ports:
-      - "3306:3306"
+      - "9165:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: formulario_db
     volumes:
-      - dbdata:/var/lib/mysql
+      - db-data:/var/lib/mysql
     networks:
-      - tot-network
+      - app-network
 
 volumes:
-  dbdata:
+  db-data:
 
 networks:
-  tot-network:
+  app-network:
     driver: bridge
